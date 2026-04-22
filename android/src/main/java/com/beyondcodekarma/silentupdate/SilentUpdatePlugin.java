@@ -5,13 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,7 +22,6 @@ import java.security.MessageDigest;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
 import org.json.JSONObject;
 
 /**
@@ -73,7 +70,7 @@ public class SilentUpdatePlugin extends Plugin {
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
     private static final AtomicBoolean downloading = new AtomicBoolean(false);
 
-    @PluginMethod()
+    @PluginMethod
     public void getState(PluginCall call) {
         SharedPreferences prefs = getContext().getSharedPreferences(OTA_PREFS, Context.MODE_PRIVATE);
         JSObject ret = new JSObject();
@@ -84,19 +81,24 @@ public class SilentUpdatePlugin extends Plugin {
         call.resolve(ret);
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void setLastCheckTs(PluginCall call) {
         Double ts = call.getDouble("ts");
-        if (ts == null) { call.reject("ts required"); return; }
-        getContext().getSharedPreferences(OTA_PREFS, Context.MODE_PRIVATE)
-            .edit().putLong(KEY_LAST_CHECK, ts.longValue()).apply();
+        if (ts == null) {
+            call.reject("ts required");
+            return;
+        }
+        getContext().getSharedPreferences(OTA_PREFS, Context.MODE_PRIVATE).edit().putLong(KEY_LAST_CHECK, ts.longValue()).apply();
         call.resolve();
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void checkManifest(PluginCall call) {
         String manifestUrl = call.getString("url");
-        if (manifestUrl == null) { call.reject("url required"); return; }
+        if (manifestUrl == null) {
+            call.reject("url required");
+            return;
+        }
 
         final String fUrl = manifestUrl;
 
@@ -122,10 +124,11 @@ public class SilentUpdatePlugin extends Plugin {
                 String msg = e.getMessage();
                 MAIN.post(() -> call.reject("Manifest fetch failed: " + msg));
             }
-        }).start();
+        })
+            .start();
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void downloadUpdate(PluginCall call) {
         if (!downloading.compareAndSet(false, true)) {
             call.reject("Download already in progress");
@@ -179,14 +182,9 @@ public class SilentUpdatePlugin extends Plugin {
                 SharedPreferences webPrefs = getContext().getSharedPreferences(WEBVIEW_PREFS, Activity.MODE_PRIVATE);
 
                 // Stage the update. Trial begins in prepareBoot on next cold start.
-                otaPrefs.edit()
-                    .putString(KEY_PENDING, fVersion)
-                    .putString(KEY_PENDING_PATH, bundleDir.getAbsolutePath())
-                    .commit();
+                otaPrefs.edit().putString(KEY_PENDING, fVersion).putString(KEY_PENDING_PATH, bundleDir.getAbsolutePath()).commit();
 
-                webPrefs.edit()
-                    .putString(CAP_SERVER_PATH, bundleDir.getAbsolutePath())
-                    .commit();
+                webPrefs.edit().putString(CAP_SERVER_PATH, bundleDir.getAbsolutePath()).commit();
 
                 emitStage("ready", fVersion);
 
@@ -194,17 +192,17 @@ public class SilentUpdatePlugin extends Plugin {
                 ret.put("success", true);
                 ret.put("version", fVersion);
                 MAIN.post(() -> call.resolve(ret));
-
             } catch (Exception e) {
                 String msg = e.getMessage();
                 MAIN.post(() -> call.reject("Download failed: " + msg));
             } finally {
                 downloading.set(false);
             }
-        }).start();
+        })
+            .start();
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void applyNow(PluginCall call) {
         SharedPreferences otaPrefs = getContext().getSharedPreferences(OTA_PREFS, Context.MODE_PRIVATE);
         String pendingPath = otaPrefs.getString(KEY_PENDING_PATH, null);
@@ -217,7 +215,8 @@ public class SilentUpdatePlugin extends Plugin {
 
         String oldVersion = otaPrefs.getString(KEY_CURRENT, "factory");
 
-        otaPrefs.edit()
+        otaPrefs
+            .edit()
             .putString(KEY_CURRENT, pendingVersion)
             .putString(KEY_PENDING, "")
             .putString(KEY_PENDING_PATH, "")
@@ -233,14 +232,13 @@ public class SilentUpdatePlugin extends Plugin {
         call.resolve();
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void notifyReady(PluginCall call) {
-        getContext().getSharedPreferences(OTA_PREFS, Context.MODE_PRIVATE)
-            .edit().putBoolean(KEY_CONFIRMED, true).commit();
+        getContext().getSharedPreferences(OTA_PREFS, Context.MODE_PRIVATE).edit().putBoolean(KEY_CONFIRMED, true).commit();
         call.resolve();
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void rollback(PluginCall call) {
         SharedPreferences webPrefs = getContext().getSharedPreferences(WEBVIEW_PREFS, Activity.MODE_PRIVATE);
         SharedPreferences otaPrefs = getContext().getSharedPreferences(OTA_PREFS, Context.MODE_PRIVATE);
@@ -282,7 +280,8 @@ public class SilentUpdatePlugin extends Plugin {
 
         if (!confirmed) {
             web.edit().remove(CAP_SERVER_PATH).commit();
-            ota.edit()
+            ota
+                .edit()
                 .putString(KEY_CURRENT, "factory")
                 .putString(KEY_PENDING, "")
                 .putString(KEY_PENDING_PATH, "")
@@ -301,11 +300,10 @@ public class SilentUpdatePlugin extends Plugin {
             // between the two commits in downloadUpdate.
             String oldVersion = ota.getString(KEY_CURRENT, "factory");
 
-            web.edit()
-                .putString(CAP_SERVER_PATH, pendingPath)
-                .commit();
+            web.edit().putString(CAP_SERVER_PATH, pendingPath).commit();
 
-            ota.edit()
+            ota
+                .edit()
                 .putString(KEY_CURRENT, pending)
                 .putString(KEY_PENDING, "")
                 .putString(KEY_PENDING_PATH, "")
@@ -373,14 +371,22 @@ public class SilentUpdatePlugin extends Plugin {
         if (pct >= 0) ev.put("percent", pct);
         ev.put("bytesWritten", bytesWritten);
         if (totalBytes >= 0) ev.put("totalBytes", totalBytes);
-        try { notifyListeners("updateProgress", ev); } catch (Throwable ignored) { /* no-op */ }
+        try {
+            notifyListeners("updateProgress", ev);
+        } catch (Throwable ignored) {
+            /* no-op */
+        }
     }
 
     private void emitStage(String stage, String version) {
         JSObject ev = new JSObject();
         ev.put("stage", stage);
         if (version != null) ev.put("version", version);
-        try { notifyListeners("updateProgress", ev); } catch (Throwable ignored) { /* no-op */ }
+        try {
+            notifyListeners("updateProgress", ev);
+        } catch (Throwable ignored) {
+            /* no-op */
+        }
     }
 
     // ── Private helpers ──
@@ -390,8 +396,7 @@ public class SilentUpdatePlugin extends Plugin {
         conn.setConnectTimeout(10_000);
         conn.setReadTimeout(10_000);
         conn.setRequestProperty("Cache-Control", "no-cache");
-        try (InputStream in = new BufferedInputStream(conn.getInputStream());
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+        try (InputStream in = new BufferedInputStream(conn.getInputStream()); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             byte[] buf = new byte[4096];
             int len;
             while ((len = in.read(buf)) != -1) {
@@ -415,8 +420,7 @@ public class SilentUpdatePlugin extends Plugin {
         lastProgressPct = -1;
         emitDownloadProgress(0, totalBytes);
 
-        try (InputStream in = new BufferedInputStream(conn.getInputStream());
-             FileOutputStream out = new FileOutputStream(dest)) {
+        try (InputStream in = new BufferedInputStream(conn.getInputStream()); FileOutputStream out = new FileOutputStream(dest)) {
             byte[] buf = new byte[8192];
             int len;
             while ((len = in.read(buf)) != -1) {
@@ -435,7 +439,11 @@ public class SilentUpdatePlugin extends Plugin {
             ev.put("percent", 100);
             ev.put("bytesWritten", bytesWritten);
             ev.put("totalBytes", totalBytes);
-            try { notifyListeners("updateProgress", ev); } catch (Throwable ignored) { /* no-op */ }
+            try {
+                notifyListeners("updateProgress", ev);
+            } catch (Throwable ignored) {
+                /* no-op */
+            }
         }
     }
 
