@@ -1,15 +1,13 @@
 import XCTest
 @testable import SilentUpdatePlugin
 
+/// iOS implementation is a stub until platform support lands. This test
+/// just asserts the Capacitor bridge identifiers stay stable, so renaming
+/// them later is caught by CI.
 class SilentUpdateTests: XCTestCase {
-    func testEcho() {
-        // This is an example of a functional test case for a plugin.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-
-        let implementation = SilentUpdate()
-        let value = "Hello, World!"
-        let result = implementation.echo(value)
-
-        XCTAssertEqual(value, result)
+    func testBridgeIdentifiers() {
+        let plugin = SilentUpdatePlugin()
+        XCTAssertEqual(plugin.identifier, "SilentUpdatePlugin")
+        XCTAssertEqual(plugin.jsName, "SilentUpdate")
     }
 }
