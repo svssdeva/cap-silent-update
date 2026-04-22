@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented here.
 
-## [Unreleased]
+## [0.1.0] - 2026-04-22
 
 ### Added
 - Initial Android implementation of the silent live-update plugin (port from an in-tree Tithimala plugin).

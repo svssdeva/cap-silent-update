@@ -1,6 +1,6 @@
 {
   "name": "@beyondcodekarma/cap-silent-update",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Self-hosted silent live updates for Capacitor apps. Zero cloud, SHA-256 integrity, trial + rollback. Android only today; iOS planned.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
