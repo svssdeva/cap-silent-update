@@ -5,7 +5,7 @@ All notable changes to this project will be documented here.
 ## [0.1.0] - 2026-04-22
 
 ### Added
-- Initial Android implementation of the silent live-update plugin (port from an in-tree Tithimala plugin).
+- Initial Android implementation of the silent live-update plugin (extracted from an in-tree production implementation).
 - One-time prefs migration from the legacy `ota_prefs` namespace into `silentupdate_prefs` so apps upgrading from a custom in-tree plugin don't lose in-flight trials or staged bundles.
 - `updateProgress` event with `stage` discriminator (`download` | `verify` | `unzip` | `ready`). Throttled to 200 ms / 1% on the download stage.
 - iOS plugin surface with all 7 methods returning `unimplemented`, so the JS API is cross-platform and apps can adopt the plugin without branching.

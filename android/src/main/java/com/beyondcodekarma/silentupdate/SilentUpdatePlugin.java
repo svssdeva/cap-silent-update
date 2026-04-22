@@ -55,8 +55,9 @@ public class SilentUpdatePlugin extends Plugin {
     private static final String KEY_CONFIRMED = "silentupdate_confirmed";
     private static final String KEY_LAST_CHECK = "silentupdate_last_check_ts";
 
-    // Legacy Tithimala prefs layout. Only read during one-time migration.
-    // Safe to remove in a future major once no v0.x-migrated devices remain
+    // Legacy prefs layout from a pre-publish in-tree implementation.
+    // Read only during the one-time migration in prepareBoot. Safe to
+    // remove in a future major once no v0.x-migrated devices remain
     // in the wild.
     private static final String LEGACY_OTA_PREFS = "ota_prefs";
     private static final String LEGACY_KEY_CURRENT = "ota_current_version";
@@ -261,7 +262,8 @@ public class SilentUpdatePlugin extends Plugin {
     /**
      * Handles three transitions at cold start:
      *   1. One-time legacy prefs migration ("ota_prefs" -> "silentupdate_prefs")
-     *      for apps upgrading from the Tithimala-internal plugin.
+     *      for apps upgrading from an in-tree implementation that used the
+     *      older namespace. See {@link #migrateLegacyPrefsOnce(Context)}.
      *   2. DOWNLOADED -> TRIAL: pending exists + confirmed=true -> promote,
      *      set confirmed=false.
      *   3. TRIAL -> FACTORY: confirmed=false -> crash before notifyReady on
