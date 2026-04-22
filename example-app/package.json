@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@capacitor/core": "latest",
-    "@beyondcodekarma/cap-silent-update": "file:..",
+    "@svssdeva/cap-silent-update": "file:..",
     "@capacitor/ios": "^8.0.0",
     "@capacitor/android": "^8.0.0"
   },

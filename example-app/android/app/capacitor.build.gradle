@@ -9,7 +9,7 @@ android {
 
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
-    implementation project(':beyondcodekarma-cap-silent-update')
+    implementation project(':svssdeva-cap-silent-update')
 
 }
 

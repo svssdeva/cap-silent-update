@@ -1,4 +1,4 @@
-package com.beyondcodekarma.silentupdate;
+package com.svssdeva.silentupdate;
 
 import android.app.Activity;
 import android.content.Context;

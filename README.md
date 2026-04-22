@@ -1,4 +1,4 @@
-# @beyondcodekarma/cap-silent-update
+# @svssdeva/cap-silent-update
 
 Self-hosted silent live updates for Capacitor apps. No accounts, no cloud vendor, no SDKs phoning home — you host the bundle on your own S3/CDN and the plugin installs it on the next cold boot. Integrity via SHA-256, trial + automatic rollback on crash.
 
@@ -26,7 +26,7 @@ This plugin is deliberately small. You bring the hosting, the manifest format is
 ## Install
 
 ```bash
-npm install @beyondcodekarma/cap-silent-update
+npm install @svssdeva/cap-silent-update
 npx cap sync
 ```
 
@@ -39,7 +39,7 @@ package com.example.myapp;
 
 import android.os.Bundle;
 import com.getcapacitor.BridgeActivity;
-import com.beyondcodekarma.silentupdate.SilentUpdatePlugin;
+import com.svssdeva.silentupdate.SilentUpdatePlugin;
 
 public class MainActivity extends BridgeActivity {
     @Override
@@ -58,7 +58,7 @@ Installing the pod keeps the JS surface stable. Every method currently rejects w
 
 ```ts
 import { Capacitor } from '@capacitor/core';
-import { SilentUpdate } from '@beyondcodekarma/cap-silent-update';
+import { SilentUpdate } from '@svssdeva/cap-silent-update';
 
 if (Capacitor.getPlatform() === 'android') {
   await SilentUpdate.checkManifest({ url: '...' });
@@ -68,7 +68,7 @@ if (Capacitor.getPlatform() === 'android') {
 ## Usage
 
 ```ts
-import { SilentUpdate } from '@beyondcodekarma/cap-silent-update';
+import { SilentUpdate } from '@svssdeva/cap-silent-update';
 
 // On every successful boot — MUST be called to confirm the trial bundle.
 await SilentUpdate.notifyReady();
@@ -100,7 +100,7 @@ if (manifest.force) {
 The plugin emits a single `updateProgress` event with a `stage` discriminator. Use this to drive a progress bar on force-apply or user-initiated checks.
 
 ```ts
-import type { UpdateProgressEvent } from '@beyondcodekarma/cap-silent-update';
+import type { UpdateProgressEvent } from '@svssdeva/cap-silent-update';
 
 const handle = await SilentUpdate.addListener('updateProgress', (ev: UpdateProgressEvent) => {
   switch (ev.stage) {

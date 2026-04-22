@@ -2,5 +2,5 @@
 include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
 
-include ':beyondcodekarma-cap-silent-update'
-project(':beyondcodekarma-cap-silent-update').projectDir = new File('../../android')
+include ':svssdeva-cap-silent-update'
+project(':svssdeva-cap-silent-update').projectDir = new File('../../android')

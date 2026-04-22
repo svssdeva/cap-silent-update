@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "BeyondcodekarmaCapSilentUpdate",
+    name: "SvssdevaCapSilentUpdate",
     platforms: [.iOS(.v15)],
     products: [
         .library(
-            name: "BeyondcodekarmaCapSilentUpdate",
+            name: "SvssdevaCapSilentUpdate",
             targets: ["SilentUpdatePlugin"])
     ],
     dependencies: [

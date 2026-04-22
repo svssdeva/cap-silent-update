@@ -1,4 +1,4 @@
-import { SilentUpdate } from '@beyondcodekarma/cap-silent-update';
+import { SilentUpdate } from '@svssdeva/cap-silent-update';
 
 window.testEcho = () => {
     const inputValue = document.getElementById("echoInput").value;
